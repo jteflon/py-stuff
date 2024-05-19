@@ -1,8 +1,7 @@
-# Imports
 import secrets
 import string
 
-# Define variables.
+# Define variables
 letters = string.ascii_letters
 digits = string.digits
 special_chars = string.punctuation
@@ -10,22 +9,23 @@ white_spaces = string.whitespace
 
 pattern = letters + digits + special_chars + white_spaces
 
-# Set password lenght.
+# Set password length
 password_length = 24
 
-# Generate a password string.
-password = ''
-for i in range(password_length):
-  password += ''.join(secrets.choice(pattern))
-print(password)
+def generate_password(length, pattern):
+    """Generate a random password of specified length from the given pattern."""
+    return ''.join(secrets.choice(pattern) for _ in range(length))
 
-# Generate password with constraints.
+def meets_constraints(password, min_digits=2, min_special=1):
+    """Check if the password meets the required constraints."""
+    has_min_digits = sum(char in digits for char in password) >= min_digits
+    has_min_special = any(char in special_chars for char in password)
+    return has_min_digits and has_min_special
+
+# Generate a password with constraints
 while True:
-  password = ''
-  for i in range(password_length):
-    password += ''.join(secrets.choice(pattern))
+    password = generate_password(password_length, pattern)
+    if meets_constraints(password):
+        break
 
-  if (any(char in special_chars for char in password) and 
-      sum(char in digits for char in password)>=2):
-          break
 print(password)
